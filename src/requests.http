@@ -1,0 +1,69 @@
+### Variables (optionnel : remplace l'hôte/port si besoin)
+@host = http://localhost:8080
+
+### 1. Dresseur existant : Sacha (3 Pokémon, bonus diversité + élite => 195)
+GET {{host}}/dresseurs/1
+Accept: application/json
+
+> {%
+    client.test("Statut 200", function () {
+        client.assert(response.status === 200, "Attendu 200, reçu " + response.status);
+    });
+    client.test("Contenu attendu", function () {
+        client.assert(response.body.nomDresseur === "Sacha");
+        client.assert(response.body.nombrePokemons === 3);
+        client.assert(response.body.niveauDresseur === 195);
+    });
+%}
+
+### 2. Dresseur avec un seul type : Ondine (2 Pokémon, 30 + 25 = 55, pas de bonus)
+GET {{host}}/dresseurs/2
+Accept: application/json
+
+> {%
+    client.test("Statut 200", function () {
+        client.assert(response.status === 200);
+    });
+    client.test("Niveau sans bonus", function () {
+        client.assert(response.body.nombrePokemons === 2);
+        client.assert(response.body.niveauDresseur === 55);
+    });
+%}
+
+### 3. Dresseur sans Pokémon : Pierre (niveau = 1)
+GET {{host}}/dresseurs/3
+Accept: application/json
+
+> {%
+    client.test("Statut 200", function () {
+        client.assert(response.status === 200);
+    });
+    client.test("Niveau 1 sans Pokémon", function () {
+        client.assert(response.body.nombrePokemons === 0);
+        client.assert(response.body.niveauDresseur === 1);
+    });
+%}
+
+### 4. Dresseur inexistant : 404 Not Found
+GET {{host}}/dresseurs/99
+Accept: application/json
+
+> {%
+    client.test("Statut 404", function () {
+        client.assert(response.status === 404, "Attendu 404, reçu " + response.status);
+    });
+    client.test("Message d'erreur", function () {
+        client.assert(response.body.status === 404);
+        client.assert(response.body.message === "Dresseur introuvable avec l'id : 99");
+    });
+%}
+
+### 5. Identifiant invalide : 400 Bad Request
+GET {{host}}/dresseurs/abc
+Accept: application/json
+
+> {%
+    client.test("Statut 400", function () {
+        client.assert(response.status === 400, "Attendu 400, reçu " + response.status);
+    });
+%}
