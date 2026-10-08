@@ -1,5 +1,4 @@
-USE
-pokemondb;
+-- Données de tests executé dans SSMS, BDD pokemondb
 
 INSERT INTO dresseur (nom, region)
 VALUES (N'Sacha', N'Kanto');

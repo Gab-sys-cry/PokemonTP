@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PokemonManagementApiApplication {
+public class PokemonTpApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PokemonManagementApiApplication.class, args);
+        SpringApplication.run(PokemonTpApplication.class, args);
     }
 }
